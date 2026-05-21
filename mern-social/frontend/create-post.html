@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a post · Pulse</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="nav"></header>
+  <main class="container-narrow">
+    <h1 style="margin: 24px 0 16px">Create a post</h1>
+    <div class="card">
+      <form id="create-post-form">
+        <div class="form-group">
+          <label for="text">Your message</label>
+          <textarea id="text" name="text" placeholder="Share your thoughts..." maxlength="2000"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Image (optional)</label>
+          <input id="image" name="image" type="file" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Publish</button>
+      </form>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
