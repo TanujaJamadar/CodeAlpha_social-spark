@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feed · Pulse</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="nav"></header>
+  <main class="container">
+    <div class="feed-grid">
+      <section>
+        <form id="composer" class="card composer">
+          <textarea name="text" placeholder="What's happening?" maxlength="2000"></textarea>
+          <div class="composer-actions">
+            <input type="file" name="image" accept="image/*">
+            <button type="submit" class="btn btn-primary">Post</button>
+          </div>
+        </form>
+        <div id="feed"></div>
+        <div id="feed-sentinel" class="loading-center"><span class="loader"></span> Loading more…</div>
+      </section>
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Suggested for you</h3>
+          <div id="suggested"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/feed.js"></script>
+</body>
+</html>
