@@ -223,8 +223,9 @@ async function renderSinglePost() {
             </div>
             <button class="btn btn-ghost btn-sm" data-del-comment>🗑</button>
           </div>`;
-        if (cBox.querySelector('.comment')) cBox.prepend(row.firstElementChild);
-        else cBox.innerHTML = ''; cBox.prepend(row.firstElementChild || row);
+        const node = row.firstElementChild;
+        if (!cBox.querySelector('.comment')) cBox.innerHTML = '';
+        cBox.prepend(node);
       } catch (err) { UI.toast(err.message, 'error'); }
       finally { btn.disabled = false; }
     });
