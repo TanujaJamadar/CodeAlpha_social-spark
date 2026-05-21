@@ -4,10 +4,9 @@ function notFound(req, res, _next) {
 
 function errorHandler(err, _req, res, _next) {
   console.error(err);
-  const status = err.status || res.statusCode !== 200 ? res.statusCode || 500 : 500;
-  res.status(status >= 400 ? status : 500).json({
-    message: err.message || 'Server error',
-  });
+  let status = err.status || err.statusCode;
+  if (!status) status = res.statusCode && res.statusCode >= 400 ? res.statusCode : 500;
+  res.status(status).json({ message: err.message || 'Server error' });
 }
 
 module.exports = { notFound, errorHandler };
