@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pulse — A modern social platform</title>
+  <meta name="description" content="Share moments, follow people, and discover what's happening.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="nav"></header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Where moments become <span>conversations</span></h1>
+        <p>Pulse is a clean, fast social platform built for sharing posts, following people, and discovering ideas. No noise — just signal.</p>
+        <div class="hero-cta">
+          <a href="register.html" class="btn btn-primary">Get started — it's free</a>
+          <a href="login.html" class="btn btn-outline">Sign in</a>
+        </div>
+      </div>
+    </section>
+    <section class="container">
+      <div class="features">
+        <div class="feature"><h3>📝 Post anything</h3><p>Text, images, ideas — drop them in seconds.</p></div>
+        <div class="feature"><h3>👥 Follow people</h3><p>Build a feed of voices you actually care about.</p></div>
+        <div class="feature"><h3>💬 Real conversation</h3><p>Comments thread under every post in real time.</p></div>
+        <div class="feature"><h3>🌗 Dark or light</h3><p>Switch themes anytime with a single tap.</p></div>
+      </div>
+    </section>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => UI.renderNav());</script>
+</body>
+</html>
