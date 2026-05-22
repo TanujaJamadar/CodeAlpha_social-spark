@@ -270,3 +270,50 @@ textarea { resize: vertical; min-height: 90px; }
   .profile-header { flex-direction: column; text-align: center; align-items: center; }
   .profile-stats { justify-content: center; }
 }
+
+/* ===== Engagement: like, save, action buttons ===== */
+.post-actions { gap: 4px; }
+.like-btn, .action-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: 0; color: var(--text-muted);
+  padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer;
+  font: inherit; font-size: .9rem; transition: var(--transition);
+  text-decoration: none;
+}
+.like-btn:hover, .action-btn:hover { background: var(--bg-elev); color: var(--text); }
+.like-btn.liked { color: #ef4444; }
+.like-btn .heart { font-size: 1.1rem; display: inline-block; transition: transform .2s; }
+.like-btn.pop .heart { animation: pop .35s ease; }
+@keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
+.save-btn.saved { color: var(--primary); }
+
+/* ===== Notif badge in nav ===== */
+.nav-notif { position: relative; }
+.notif-badge {
+  position: absolute; top: 2px; right: 2px;
+  background: var(--danger); color: white; font-size: .65rem;
+  min-width: 16px; height: 16px; padding: 0 5px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 700;
+}
+
+/* ===== Page head ===== */
+.page-head { display: flex; align-items: center; justify-content: space-between; margin: 24px 0 16px; gap: 12px; }
+.page-head h1 { margin: 0; }
+.section-label { font-size: .8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: .06em; margin: 16px 0 10px; }
+
+/* ===== Notifications list ===== */
+.notif-stack { display: flex; flex-direction: column; gap: 8px; }
+.notif-row {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); transition: var(--transition); animation: fadeUp .3s ease both;
+}
+.notif-row:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.notif-row.unread { background: color-mix(in oklab, var(--primary-soft) 70%, var(--bg-card)); border-color: color-mix(in oklab, var(--primary) 30%, var(--border)); }
+.notif-body { flex: 1; min-width: 0; }
+.notif-body .meta { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
+.notif-row .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+/* ===== Search page ===== */
+.search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 16px 0 40px; }
+@media (max-width: 800px) { .search-grid { grid-template-columns: 1fr; } }

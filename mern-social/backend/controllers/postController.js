@@ -38,9 +38,21 @@ exports.getFeed = async (req, res, next) => {
     }
 
     const [posts, total] = await Promise.all([
-      Post.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate('author', 'username name avatar'),
+      Post.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate('author', 'username name avatar').lean(),
       Post.countDocuments(filter),
     ]);
+    if (req.user && posts.length) {
+      const Like = require('../models/Like');
+      const SavedPost = require('../models/SavedPost');
+      const ids = posts.map(p => p._id);
+      const [likes, saves] = await Promise.all([
+        Like.find({ user: req.user._id, post: { $in: ids } }).select('post'),
+        SavedPost.find({ user: req.user._id, post: { $in: ids } }).select('post'),
+      ]);
+      const likedSet = new Set(likes.map(l => String(l.post)));
+      const savedSet = new Set(saves.map(s => String(s.post)));
+      posts.forEach(p => { p.likedByMe = likedSet.has(String(p._id)); p.savedByMe = savedSet.has(String(p._id)); });
+    }
     res.json({ posts, page, hasMore: skip + posts.length < total });
   } catch (err) { next(err); }
 };
@@ -67,7 +79,16 @@ exports.getPost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id).populate('author', 'username name avatar');
     if (!post) return res.status(404).json({ message: 'Post not found' });
-    res.json({ post });
+    let liked = false, saved = false;
+    if (req.user) {
+      const Like = require('../models/Like');
+      const SavedPost = require('../models/SavedPost');
+      [liked, saved] = await Promise.all([
+        Like.exists({ post: post._id, user: req.user._id }).then(Boolean),
+        SavedPost.exists({ post: post._id, user: req.user._id }).then(Boolean),
+      ]);
+    }
+    res.json({ post, liked, saved });
   } catch (err) { next(err); }
 };
 

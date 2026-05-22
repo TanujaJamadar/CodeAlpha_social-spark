@@ -50,7 +50,12 @@ function renderNav(activePath = location.pathname) {
   const linksLoggedIn = `
     <a href="dashboard.html" data-path="dashboard.html">Feed</a>
     <a href="explore.html" data-path="explore.html">Explore</a>
+    <a href="search.html" data-path="search.html">Search</a>
     <a href="create-post.html" data-path="create-post.html">Create</a>
+    <a href="notifications.html" data-path="notifications.html" class="nav-notif">
+      🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+    </a>
+    <a href="saved.html" data-path="saved.html">Saved</a>
     <a href="profile.html?u=${encodeURIComponent(user?.username || '')}" data-path="profile.html">Profile</a>
     <button id="logoutBtn" class="btn btn-outline btn-sm">Logout</button>
   `;
@@ -87,6 +92,17 @@ function renderNav(activePath = location.pathname) {
   });
 
   initTheme();
+  if (logged) refreshNotifBadge();
+}
+
+async function refreshNotifBadge() {
+  const badge = document.getElementById('notifBadge');
+  if (!badge) return;
+  try {
+    const { count } = await window.API.unreadNotifications();
+    if (count > 0) { badge.hidden = false; badge.textContent = count > 99 ? '99+' : count; }
+    else { badge.hidden = true; }
+  } catch {}
 }
 
 // Guard a page that requires auth
@@ -106,4 +122,4 @@ function avatarHtml(user, size = '') {
   return `<div class="${cls}">${escapeHtml(letter)}</div>`;
 }
 
-window.UI = { $, $$, escapeHtml, timeAgo, getQuery, toast, renderNav, requireAuth, redirectIfLoggedIn, avatarHtml, applyTheme, initTheme };
+window.UI = { $, $$, escapeHtml, timeAgo, getQuery, toast, renderNav, requireAuth, redirectIfLoggedIn, avatarHtml, applyTheme, initTheme, refreshNotifBadge };

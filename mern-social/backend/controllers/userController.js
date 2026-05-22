@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Follow = require('../models/Follow');
+const Notification = require('../models/Notification');
 const path = require('path');
 
 function publicUrl(req, filename) {
@@ -44,6 +45,11 @@ exports.followUser = async (req, res, next) => {
       await Follow.create({ follower: req.user._id, following: target._id });
       await User.updateOne({ _id: target._id }, { $inc: { followersCount: 1 } });
       await User.updateOne({ _id: req.user._id }, { $inc: { followingCount: 1 } });
+      await Notification.create({
+        recipient: target._id,
+        sender: req.user._id,
+        type: 'follow',
+      });
     } catch (e) {
       if (e.code === 11000) return res.status(200).json({ message: 'Already following' });
       throw e;
