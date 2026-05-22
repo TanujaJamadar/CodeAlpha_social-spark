@@ -1,5 +1,6 @@
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
+const Notification = require('../models/Notification');
 
 exports.listForPost = async (req, res, next) => {
   try {
@@ -21,6 +22,15 @@ exports.addComment = async (req, res, next) => {
 
     const comment = await Comment.create({ post: post._id, author: req.user._id, text });
     await Post.updateOne({ _id: post._id }, { $inc: { commentsCount: 1 } });
+    if (String(post.author) !== String(req.user._id)) {
+      await Notification.create({
+        recipient: post.author,
+        sender: req.user._id,
+        type: 'comment',
+        post: post._id,
+        text: text.slice(0, 140),
+      });
+    }
     const populated = await Comment.findById(comment._id).populate('author', 'username name avatar');
     res.status(201).json({ comment: populated });
   } catch (err) { next(err); }
