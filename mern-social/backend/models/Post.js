@@ -6,10 +6,12 @@ const postSchema = new mongoose.Schema(
     text: { type: String, maxlength: 2000, default: '' },
     image: { type: String, default: '' },
     commentsCount: { type: Number, default: 0 },
+    likesCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
 postSchema.index({ createdAt: -1 });
+postSchema.index({ text: 'text' });
 
 module.exports = mongoose.model('Post', postSchema);
