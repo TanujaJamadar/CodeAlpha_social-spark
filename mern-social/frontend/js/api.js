@@ -59,6 +59,21 @@ const API = {
   listComments: (postId) => request(`/posts/${postId}/comments`),
   addComment: (postId, text) => request(`/posts/${postId}/comments`, { method: 'POST', body: { text } }),
   deleteComment: (id) => request(`/comments/${id}`, { method: 'DELETE' }),
+
+  // Likes & Saves
+  like: (id) => request(`/posts/${id}/like`, { method: 'POST' }),
+  unlike: (id) => request(`/posts/${id}/like`, { method: 'DELETE' }),
+  savePost: (id) => request(`/posts/${id}/save`, { method: 'POST' }),
+  unsavePost: (id) => request(`/posts/${id}/save`, { method: 'DELETE' }),
+  savedPosts: () => request('/saved'),
+
+  // Notifications
+  notifications: () => request('/notifications'),
+  unreadNotifications: () => request('/notifications/unread-count'),
+  markAllNotificationsRead: () => request('/notifications/read-all', { method: 'POST' }),
+
+  // Search
+  search: (q) => request('/search?q=' + encodeURIComponent(q)),
 };
 
 window.API = API;
