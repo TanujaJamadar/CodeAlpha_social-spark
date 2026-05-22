@@ -9,6 +9,9 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
+const notificationRoutes = require('./routes/notifications');
+const searchRoutes = require('./routes/search');
+const savedRoutes = require('./routes/saved');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 const app = express();
@@ -32,6 +35,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/saved', savedRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
