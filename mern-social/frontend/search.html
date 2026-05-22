@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search · Pulse</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="nav"></header>
+  <main class="container">
+    <h1 style="margin: 24px 0 12px">Search</h1>
+    <input id="search-input" placeholder="Search users and posts..." autofocus style="max-width:520px">
+    <div class="search-grid">
+      <section>
+        <h3 class="section-label">People</h3>
+        <div id="search-users"></div>
+      </section>
+      <section>
+        <h3 class="section-label">Posts</h3>
+        <div id="search-posts"></div>
+      </section>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>
