@@ -67,7 +67,16 @@ exports.getPost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id).populate('author', 'username name avatar');
     if (!post) return res.status(404).json({ message: 'Post not found' });
-    res.json({ post });
+    let liked = false, saved = false;
+    if (req.user) {
+      const Like = require('../models/Like');
+      const SavedPost = require('../models/SavedPost');
+      [liked, saved] = await Promise.all([
+        Like.exists({ post: post._id, user: req.user._id }).then(Boolean),
+        SavedPost.exists({ post: post._id, user: req.user._id }).then(Boolean),
+      ]);
+    }
+    res.json({ post, liked, saved });
   } catch (err) { next(err); }
 };
 
