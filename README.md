@@ -99,4 +99,3 @@ This repo is a demo — feel free to open issues or PRs with improvements.
 
 ---
 
-If this draft looks good, I will replace the root `README.md` with it, commit, and push.
