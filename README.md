@@ -112,7 +112,11 @@ npx serve . -l 5500
 # Option C:
 python3 -m http.server 5500
 ```
-Then open `http://localhost:5500/index.html`.
+Then open:
+
+- `http://localhost:5500/index.html`
+- `http://localhost:5500/login.html`
+
 Open `http://localhost:5500`.
 > If you serve the frontend on a different port/origin, update `CLIENT_ORIGIN` in `backend/.env` to match (CORS), or set `window.__API_BASE__` at the top of each HTML page to override the API base URL.
 > If you serve the frontend from a different host/port, set `CLIENT_ORIGIN` in `backend/.env` and add a `window.__API_BASE__ = "https://your-api"` script tag before `js/api.js`.
