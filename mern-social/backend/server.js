@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -18,8 +19,16 @@ const app = express();
 
 connectDB();
 
+const clientOrigins = (process.env.CLIENT_ORIGIN || '*')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+if (!clientOrigins.includes('http://localhost:5000')) {
+  clientOrigins.push('http://localhost:5000');
+}
+
 app.use(cors({
-  origin: (process.env.CLIENT_ORIGIN || '*').split(','),
+  origin: clientOrigins,
   credentials: true,
 }));
 app.use(express.json({ limit: '5mb' }));
@@ -28,6 +37,12 @@ app.use(morgan('dev'));
 
 // Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const frontendDir = path.join(__dirname, '..', 'frontend');
+if (fs.existsSync(frontendDir)) {
+  app.use(express.static(frontendDir));
+  app.get('/', (_req, res) => res.sendFile(path.join(frontendDir, 'index.html')));
+}
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 

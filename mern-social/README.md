@@ -50,38 +50,57 @@ mern-social/
 - MongoDB running locally **or** a MongoDB Atlas connection string
 
 ### 2. Backend setup
-```bash
+```powershell
 cd backend
-cp .env.example .env       # then edit values
+copy .env.example .env
 npm install
-npm run seed               # optional: sample users + posts
-npm run dev                # http://localhost:5000
+npm run seed -- --reset   # optional: seed sample users + posts
+npm run dev
 ```
+
+If `npm run dev` fails because port `5000` is already in use, stop the existing backend process first.
 
 ### 3. Frontend setup
-The frontend is plain HTML/CSS/JS. Serve `frontend/` with any static server:
+You can run the frontend using the backend-hosted app or a separate static server.
 
-```bash
+#### Option A: Use backend-hosted frontend
+Open this URL in your browser:
+
+- `http://localhost:5000/login.html`
+
+This is the simplest option because the backend serves the frontend and API together.
+
+#### Option B: Serve frontend separately on port 5500
+In a second terminal:
+
+```powershell
 cd frontend
-# Option A: VS Code Live Server (right-click index.html → Open with Live Server)
-# Option B:
-npx serve . -l 5500
-# Option C:
-python3 -m http.server 5500
+npx http-server . -p 5500
 ```
 
-Open `http://localhost:5500`.
+Then open:
 
-> If you serve the frontend from a different host/port, set `CLIENT_ORIGIN` in `backend/.env` and add a `window.__API_BASE__ = "https://your-api"` script tag before `js/api.js`.
+- `http://localhost:5500/login.html`
 
-### 4. Sample logins (after `npm run seed`)
-| Email | Password |
-|---|---|
-| ada@pulse.dev | password123 |
-| linus@pulse.dev | password123 |
-| grace@pulse.dev | password123 |
-| alan@pulse.dev | password123 |
-| margaret@pulse.dev | password123 |
+> Important: Do not open the page via `file://`. Always use `http://`.
+
+### 4. Correct login credentials
+Use one of these seeded accounts:
+
+- `ada@pulse.dev` / `password123`
+- `linus@pulse.dev` / `password123`
+- `grace@pulse.dev` / `password123`
+- `alan@pulse.dev` / `password123`
+- `margaret@pulse.dev` / `password123`
+
+Use one of these seeded accounts first for immediate testing. If you create a new account, use a valid email address like `tanuja@example.com` and a password with at least 6 characters.
+
+If login is not successful, an error message will appear above the form explaining why (for example: invalid email, password required, or invalid credentials).
+
+### 5. Notes
+- If you use `http://localhost:5500`, make sure the backend is running on `http://localhost:5000`.
+- Keep `CLIENT_ORIGIN=http://localhost:5500,http://localhost:5000` in `backend/.env`.
+- If you want to force the frontend to use the backend API from a different URL, set `window.__API_BASE__` before `js/api.js`.
 
 ## 🔧 Environment variables (`backend/.env`)
 
@@ -90,7 +109,7 @@ PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/mern_social
 JWT_SECRET=replace_this_with_a_long_random_string
 JWT_EXPIRES_IN=7d
-CLIENT_ORIGIN=http://localhost:5500
+CLIENT_ORIGIN=http://localhost:5500,http://localhost:5000
 SERVER_URL=http://localhost:5000
 ```
 

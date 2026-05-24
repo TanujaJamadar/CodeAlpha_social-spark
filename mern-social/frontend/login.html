@@ -32,5 +32,49 @@
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    if (!window.__authJsLoaded || !window.__authLoginAttached) {
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm && !window.__authLoginAttached) {
+        window.__authLoginAttached = true;
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fd = new FormData(loginForm);
+          const email = (fd.get('email') || '').toString().trim();
+          const password = (fd.get('password') || '').toString();
+          if (!email || !password) {
+            const errorEl = loginForm.querySelector('.form-error.global') || document.createElement('div');
+            errorEl.className = 'form-error global';
+            if (!loginForm.querySelector('.form-error.global')) loginForm.prepend(errorEl);
+            errorEl.textContent = 'Email and password required';
+            return;
+          }
+          const btn = loginForm.querySelector('button[type=submit]');
+          btn.disabled = true;
+          btn.innerHTML = '<span class="loader"></span> Signing in...';
+          try {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password }),
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || 'Login failed');
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            window.location.href = 'dashboard.html';
+          } catch (err) {
+            const errorEl = loginForm.querySelector('.form-error.global') || document.createElement('div');
+            errorEl.className = 'form-error global';
+            if (!loginForm.querySelector('.form-error.global')) loginForm.prepend(errorEl);
+            errorEl.textContent = err.message;
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Sign in';
+          }
+        });
+      }
+    }
+  </script>
 </body>
 </html>

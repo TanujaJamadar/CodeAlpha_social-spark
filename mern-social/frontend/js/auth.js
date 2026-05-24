@@ -1,4 +1,7 @@
 // Register & login form logic
+window.__authJsLoaded = true;
+window.__authLoginAttached = false;
+window.__authRegisterAttached = false;
 const { $, toast, redirectIfLoggedIn } = UI;
 
 function showError(form, msg) {
@@ -11,7 +14,7 @@ function showError(form, msg) {
   el.textContent = msg;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function attachAuthHandlers() {
   UI.renderNav();
   redirectIfLoggedIn();
 
@@ -45,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const loginForm = $('#loginForm');
-  if (loginForm) {
+  if (loginForm && !window.__authLoginAttached) {
+    window.__authLoginAttached = true;
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(loginForm);
@@ -61,10 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
         toast('Welcome back', 'success');
         setTimeout(() => location.href = 'dashboard.html', 400);
       } catch (err) {
-        showError(loginForm, err.message);
+        showError(loginForm, err.message || 'Login failed');
       } finally {
         btn.disabled = false; btn.textContent = 'Sign in';
       }
     });
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', attachAuthHandlers);
+} else {
+  attachAuthHandlers();
+}
+
