@@ -24,6 +24,19 @@ Prerequisites:
 - Node.js 18+
 - MongoDB running locally OR a MongoDB Atlas connection string
 
+### Important: `.env` setup
+
+The `.env` file is **not** included in the repo (gitignored for security). When you clone, you must create it from `.env.example`:
+
+```powershell
+cd mern-social/backend
+copy .env.example .env
+```
+
+Without `.env`, the backend will fail to start with an error like `Error: PORT is not defined`.
+
+### Steps
+
 1. Backend
 
 ```powershell
@@ -78,6 +91,8 @@ SERVER_URL=http://localhost:5000
 - `npx http-server . -p 5500` — serve frontend locally
 
 ## Troubleshooting
+
+- **Backend won't start with error `PORT is not defined`:** You forgot to copy `.env.example` to `.env`. Run `copy .env.example .env` in `mern-social/backend/`.
 
 - `EADDRINUSE` on port 5000: stop the process using the port and restart the backend. In PowerShell:
 
