@@ -53,13 +53,7 @@
           btn.disabled = true;
           btn.innerHTML = '<span class="loader"></span> Signing in...';
           try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password }),
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'Login failed');
+            const data = await API.login({ email, password });
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             window.location.href = 'dashboard.html';
