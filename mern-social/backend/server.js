@@ -19,12 +19,19 @@ const app = express();
 
 connectDB();
 
-const clientOrigins = (process.env.CLIENT_ORIGIN || '*')
+const defaultClientOrigins = [
+  'https://codealpha-social-spark-frontend.onrender.com',
+  'https://codealpha-social-spark.onrender.com',
+];
+
+const clientOrigins = (process.env.CLIENT_ORIGIN || defaultClientOrigins.join(','))
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
-if (!clientOrigins.includes('https://codealpha-social-spark.onrender.com')) {
-  clientOrigins.push('https://codealpha-social-spark.onrender.com');
+for (const origin of defaultClientOrigins) {
+  if (!clientOrigins.includes(origin)) {
+    clientOrigins.push(origin);
+  }
 }
 
 app.use(cors({
