@@ -1,5 +1,5 @@
-// Central API client. Adjust API_BASE if your backend runs elsewhere.
-const API_BASE = (window.__API_BASE__ || 'http://localhost:5000') + '/api';
+// Central API client. Adjust window.__API_BASE__ if your backend runs elsewhere.
+const API_BASE = (window.__API_BASE__ || 'https://codealpha-social-spark.onrender.com') + '/api';
 
 function getToken() { return localStorage.getItem('token'); }
 function setToken(t) { localStorage.setItem('token', t); }
