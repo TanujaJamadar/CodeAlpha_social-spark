@@ -159,6 +159,12 @@ textarea { resize: vertical; min-height: 100px; }
   background: color-mix(in oklab, var(--danger) 12%, transparent);
   border: 1px solid color-mix(in oklab, var(--danger) 35%, transparent);
 }
+.form-success.global {
+  margin: 0 0 16px; padding: 10px 12px; border-radius: 10px;
+  color: var(--success);
+  background: color-mix(in oklab, var(--success) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--success) 35%, transparent);
+}
 .form-hint { margin: 6px 0 0; color: var(--text-muted); font-size: .82rem; line-height: 1.4; }
 input[type="file"] { padding: 8px; cursor: pointer; }
 

@@ -5,10 +5,22 @@ window.__authRegisterAttached = false;
 const { $, toast, redirectIfLoggedIn } = UI;
 
 function showError(form, msg) {
+  form.querySelector('.form-success.global')?.remove();
   let el = form.querySelector('.form-error.global');
   if (!el) {
     el = document.createElement('div');
     el.className = 'form-error global';
+    form.prepend(el);
+  }
+  el.textContent = msg;
+}
+
+function showSuccess(form, msg) {
+  form.querySelector('.form-error.global')?.remove();
+  let el = form.querySelector('.form-success.global');
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'form-success global';
     form.prepend(el);
   }
   el.textContent = msg;
@@ -50,12 +62,15 @@ function attachAuthHandlers() {
       try {
         const { token, user } = await API.register({ username, email, password });
         AUTH.setToken(token); AUTH.setUser(user);
+        showSuccess(registerForm, 'Account created successfully. Redirecting to your dashboard...');
         toast('Welcome to Pulse!', 'success');
-        setTimeout(() => location.href = 'dashboard.html', 400);
+        setTimeout(() => location.assign('dashboard.html'), 700);
       } catch (err) {
         showError(registerForm, friendlyAuthError(err.message, 'register'));
       } finally {
-        btn.disabled = false; btn.textContent = 'Create account';
+        if (!AUTH.getToken()) {
+          btn.disabled = false; btn.textContent = 'Create account';
+        }
       }
     });
   }
@@ -77,12 +92,15 @@ function attachAuthHandlers() {
       try {
         const { token, user } = await API.login({ email, password });
         AUTH.setToken(token); AUTH.setUser(user);
+        showSuccess(loginForm, 'Signed in successfully. Redirecting to your dashboard...');
         toast('Welcome back', 'success');
-        setTimeout(() => location.href = 'dashboard.html', 400);
+        setTimeout(() => location.assign('dashboard.html'), 700);
       } catch (err) {
         showError(loginForm, friendlyAuthError(err.message, 'login'));
       } finally {
-        btn.disabled = false; btn.textContent = 'Sign in';
+        if (!AUTH.getToken()) {
+          btn.disabled = false; btn.textContent = 'Sign in';
+        }
       }
     });
   }
