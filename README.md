@@ -1,116 +1,226 @@
-# Pulse — MERN Social Platform
+# CodeAlpha Social Spark - Pulse
 
-A full-stack social media app built with MongoDB, Express, Vanilla JavaScript, and Node.js. This repository contains the project source for a local development environment: a Node/Express backend with a static frontend built in vanilla HTML/CSS/JS.
+Pulse is a full-stack social media web app built with Node.js, Express, MongoDB, and vanilla HTML/CSS/JavaScript. It includes authentication, user profiles, posts, likes, saves, comments, follows, notifications, search, and image uploads.
 
-## What is this project
+## Live Demo
 
-Pulse is a small social network demo implementing:
+- Frontend: https://codealpha-social-spark-frontend.onrender.com
+- Backend API: https://codealpha-social-spark.onrender.com
+- API health check: https://codealpha-social-spark.onrender.com/api/health
 
-- JWT auth with bcrypt password hashing
-- User profiles, avatar upload, bio
-- Follow/unfollow system and suggested users
-- Posts with optional image upload
-- Likes, saves (bookmarks), and comments
-- Notifications for likes, comments, follows
-- Simple search/explore
-- Responsive UI with dark/light theme
+## Demo Login Credentials
 
-The backend is in `mern-social/backend` and serves the API and (optionally) the frontend static files. The frontend lives in `mern-social/frontend` and can be served by the backend or by a separate static server.
+Use these accounts after the database has been seeded:
 
-## Quick start
+| Email | Password |
+| --- | --- |
+| ada@pulse.dev | password123 |
+| linus@pulse.dev | password123 |
+| grace@pulse.dev | password123 |
+| alan@pulse.dev | password123 |
+| margaret@pulse.dev | password123 |
 
-Prerequisites:
+You can also create a new account from the register page.
 
-- Node.js 18+
-- MongoDB running locally OR a MongoDB Atlas connection string
+## Features
 
-### Important: `.env` setup
+- JWT-based user authentication
+- Secure password hashing with bcrypt
+- Register, login, logout, and current-user session handling
+- User profiles with avatar upload and bio
+- Follow and unfollow users
+- Suggested users and explore page
+- Create, edit, and delete posts
+- Optional image upload for posts
+- Like and unlike posts
+- Save and unsave posts
+- Comment system
+- Notifications for follows, likes, and comments
+- Search users and posts
+- Responsive frontend with dark/light theme support
 
-The `.env` file is **not** included in the repo (gitignored for security). When you clone, you must create it from `.env.example`:
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | HTML, CSS, Vanilla JavaScript |
+| Backend | Node.js, Express.js |
+| Database | MongoDB / MongoDB Atlas |
+| Auth | JWT, bcryptjs |
+| Uploads | Multer |
+| Hosting | Render |
+
+## Project Structure
+
+```text
+CodeAlpha_social-spark/
+  README.md
+  mern-social/
+    package.json
+    backend/
+      server.js
+      seed.js
+      .env.example
+      config/
+      controllers/
+      middleware/
+      models/
+      routes/
+      uploads/
+      utils/
+    frontend/
+      index.html
+      login.html
+      register.html
+      dashboard.html
+      css/
+      js/
+```
+
+## API Overview
+
+The backend mounts all API routes under `/api`.
+
+| Route | Purpose |
+| --- | --- |
+| `/api/health` | Check backend status |
+| `/api/auth` | Register, login, logout, current user |
+| `/api/users` | Profiles, follow/unfollow, suggested users |
+| `/api/posts` | Feed, create posts, update posts, delete posts |
+| `/api/comments` | Delete comments |
+| `/api/notifications` | List notifications and mark as read |
+| `/api/search` | Search users/posts |
+| `/api/saved` | Saved posts |
+| `/uploads` | Uploaded images |
+
+## Environment Variables
+
+Create `mern-social/backend/.env` from `mern-social/backend/.env.example`.
+
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/mern_social
+JWT_SECRET=replace_this_with_a_long_random_string
+JWT_EXPIRES_IN=7d
+CLIENT_ORIGIN=https://codealpha-social-spark-frontend.onrender.com
+SERVER_URL=https://codealpha-social-spark.onrender.com
+```
+
+Important notes:
+
+- `MONGO_URI` must be your MongoDB Atlas connection string when deploying on Render.
+- `JWT_SECRET` should be a long private random string.
+- `CLIENT_ORIGIN` must be the deployed frontend URL.
+- `SERVER_URL` must be the deployed backend URL.
+- Do not commit your real `.env` file.
+
+## Run Locally
+
+### Prerequisites
+
+- Node.js 18 or newer
+- npm
+- MongoDB Atlas connection string
+
+### 1. Clone the project
 
 ```powershell
-cd mern-social/backend
+git clone <your-repository-url>
+cd CodeAlpha_social-spark/mern-social
+```
+
+### 2. Install backend dependencies
+
+```powershell
+cd backend
+npm install
+```
+
+### 3. Create the backend environment file
+
+```powershell
 copy .env.example .env
 ```
 
-Without `.env`, the backend will fail to start with an error like `Error: PORT is not defined`.
+Then open `.env` and add your real MongoDB Atlas URL and JWT secret.
 
-### Steps
+For local testing, your `.env` can still use the deployed frontend/backend URLs:
 
-1. Backend
+```env
+CLIENT_ORIGIN=https://codealpha-social-spark-frontend.onrender.com
+SERVER_URL=https://codealpha-social-spark.onrender.com
+```
+
+### 4. Seed sample data
+
+Run this if you want the demo users and sample posts:
 
 ```powershell
-cd mern-social/backend
-copy .env.example .env
-npm install
-npm run seed -- --reset   # optional: seed sample users + posts
+npm run seed:reset
+```
+
+### 5. Start the backend
+
+```powershell
 npm run dev
 ```
 
-2. Frontend (option A — served by backend)
+The backend starts on the port from `.env`. In production, Render provides the port automatically.
 
-Open:
+### 6. Run the frontend locally
 
-- http://localhost:5000/login.html
-
-3. Frontend (option B — serve separately)
+Open a new terminal:
 
 ```powershell
-cd mern-social/frontend
-npx http-server . -p 5500
-```
-Then open:
-
-- http://localhost:5500/login.html
-
-## Seeded accounts
-
-After running `npm run seed` you can use the following accounts:
-
-- ada@pulse.dev / password123
-- linus@pulse.dev / password123
-- grace@pulse.dev / password123
-- alan@pulse.dev / password123
-- margaret@pulse.dev / password123
-
-## Environment variables (`mern-social/backend/.env`)
-
-```
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/mern_social
-JWT_SECRET=replace_this_with_a_long_random_string
-JWT_EXPIRES_IN=7d
-CLIENT_ORIGIN=http://localhost:5500,http://localhost:5000
-SERVER_URL=http://localhost:5000
+cd CodeAlpha_social-spark/mern-social/frontend
+npx http-server .
 ```
 
-## Useful commands
+The frontend already points to the deployed backend API:
 
-- `npm run dev` — run backend with `nodemon` (restarts on changes)
-- `npm run seed -- --reset` — reset DB and seed sample data
-- `npx http-server . -p 5500` — serve frontend locally
+```js
+https://codealpha-social-spark.onrender.com/api
+```
+
+## Useful Commands
+
+Run these from `mern-social/backend`:
+
+```powershell
+npm run dev
+npm start
+npm run seed
+npm run seed:reset
+```
+
+Command purpose:
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Starts backend with nodemon |
+| `npm start` | Starts backend with Node |
+| `npm run seed` | Seeds sample data |
+| `npm run seed:reset` | Clears and reseeds sample data |
 
 ## Troubleshooting
 
-- **Backend won't start with error `PORT is not defined`:** You forgot to copy `.env.example` to `.env`. Run `copy .env.example .env` in `mern-social/backend/`.
+### Backend cannot connect to database
 
-- `EADDRINUSE` on port 5000: stop the process using the port and restart the backend. In PowerShell:
+Check:
+
+- MongoDB Atlas username and password are correct.
+- Your password is URL encoded if it has special characters.
+- MongoDB Atlas Network Access allows Render connections.
+- `MONGO_URI` is set in Render environment variables.
+
+### Demo login does not work
+
+Run the seed command locally or on your deployed database:
 
 ```powershell
-Get-NetTCPConnection -LocalPort 5000 | Select-Object LocalAddress,LocalPort,State,OwningProcess
-Stop-Process -Id <OwningProcess> -Force
+npm run seed:reset
 ```
 
-- If you serve the frontend on a different origin, add it to `CLIENT_ORIGIN` in `.env`.
+## Author
 
-## Development notes
-
-- API endpoints are mounted under `/api/*`.
-- Uploaded images are saved to `backend/uploads` (gitignored) in dev.
-
-## Contributing
-
-This repo is a demo — feel free to open issues or PRs with improvements.
-
----
-
+CodeAlpha Social Spark project.
