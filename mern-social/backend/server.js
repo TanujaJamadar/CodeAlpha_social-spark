@@ -23,8 +23,8 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || '*')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
-if (!clientOrigins.includes('http://localhost:5000')) {
-  clientOrigins.push('http://localhost:5000');
+if (!clientOrigins.includes('https://codealpha-social-spark.onrender.com')) {
+  clientOrigins.push('https://codealpha-social-spark.onrender.com');
 }
 
 app.use(cors({
@@ -58,4 +58,4 @@ app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`API ready on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`API ready on port ${PORT}`));
