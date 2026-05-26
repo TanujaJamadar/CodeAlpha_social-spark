@@ -16,11 +16,13 @@
       <form id="loginForm" novalidate>
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" name="email" type="email" required autocomplete="email">
+          <input id="email" name="email" type="email" required autocomplete="email" aria-describedby="loginEmailHelp">
+          <p id="loginEmailHelp" class="form-hint">Enter the email used during registration, not your username.</p>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" name="password" type="password" required autocomplete="current-password">
+          <input id="password" name="password" type="password" required autocomplete="current-password" aria-describedby="loginPasswordHelp">
+          <p id="loginPasswordHelp" class="form-hint">Enter the same password you created. Passwords are case-sensitive.</p>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Sign in</button>
       </form>
@@ -46,7 +48,7 @@
             const errorEl = loginForm.querySelector('.form-error.global') || document.createElement('div');
             errorEl.className = 'form-error global';
             if (!loginForm.querySelector('.form-error.global')) loginForm.prepend(errorEl);
-            errorEl.textContent = 'Email and password required';
+            errorEl.textContent = 'Enter your registered email address and password. Login uses email, not username.';
             return;
           }
           const btn = loginForm.querySelector('button[type=submit]');
@@ -61,7 +63,9 @@
             const errorEl = loginForm.querySelector('.form-error.global') || document.createElement('div');
             errorEl.className = 'form-error global';
             if (!loginForm.querySelector('.form-error.global')) loginForm.prepend(errorEl);
-            errorEl.textContent = err.message;
+            errorEl.textContent = err.message === 'Invalid credentials'
+              ? 'Invalid login. Use your registered email address, not username, and the exact password you created.'
+              : err.message;
           } finally {
             btn.disabled = false;
             btn.textContent = 'Sign in';

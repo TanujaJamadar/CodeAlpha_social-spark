@@ -154,6 +154,12 @@ input:focus, textarea:focus, select:focus {
 }
 textarea { resize: vertical; min-height: 100px; }
 .form-error { color: var(--danger); font-size: .85rem; margin-top: 6px; }
+.form-error.global {
+  margin: 0 0 16px; padding: 10px 12px; border-radius: 10px;
+  background: color-mix(in oklab, var(--danger) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--danger) 35%, transparent);
+}
+.form-hint { margin: 6px 0 0; color: var(--text-muted); font-size: .82rem; line-height: 1.4; }
 input[type="file"] { padding: 8px; cursor: pointer; }
 
 /* ---------- Landing hero ---------- */

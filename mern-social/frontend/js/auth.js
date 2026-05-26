@@ -14,6 +14,19 @@ function showError(form, msg) {
   el.textContent = msg;
 }
 
+function friendlyAuthError(message, mode) {
+  if (message === 'Invalid credentials') {
+    return 'Invalid login. Use your registered email address, not username, and the exact password you created.';
+  }
+  if (message === 'Username or email already in use') {
+    return 'That username or email is already registered. Choose another one or sign in with the existing email.';
+  }
+  if (mode === 'register' && message === 'Valid email required') {
+    return 'Enter a valid email address, for example name@example.com.';
+  }
+  return message || 'Something went wrong. Please try again.';
+}
+
 function attachAuthHandlers() {
   UI.renderNav();
   redirectIfLoggedIn();
@@ -27,10 +40,10 @@ function attachAuthHandlers() {
       const email = (fd.get('email') || '').toString().trim();
       const password = (fd.get('password') || '').toString();
 
-      if (username.length < 3) return showError(registerForm, 'Username must be at least 3 characters');
-      if (!/^[a-zA-Z0-9_.]+$/.test(username)) return showError(registerForm, 'Only letters, numbers, _ and . allowed');
-      if (!/^\S+@\S+\.\S+$/.test(email)) return showError(registerForm, 'Enter a valid email');
-      if (password.length < 6) return showError(registerForm, 'Password must be at least 6 characters');
+      if (username.length < 3 || username.length > 30) return showError(registerForm, 'Username must be 3-30 characters long.');
+      if (!/^[a-zA-Z0-9_.]+$/.test(username)) return showError(registerForm, 'Username can only use letters, numbers, underscore, and dot.');
+      if (!/^\S+@\S+\.\S+$/.test(email)) return showError(registerForm, 'Enter a valid email address, for example name@example.com.');
+      if (password.length < 6) return showError(registerForm, 'Password must be at least 6 characters long.');
 
       const btn = registerForm.querySelector('button[type=submit]');
       btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Creating...';
@@ -40,7 +53,7 @@ function attachAuthHandlers() {
         toast('Welcome to Pulse!', 'success');
         setTimeout(() => location.href = 'dashboard.html', 400);
       } catch (err) {
-        showError(registerForm, err.message);
+        showError(registerForm, friendlyAuthError(err.message, 'register'));
       } finally {
         btn.disabled = false; btn.textContent = 'Create account';
       }
@@ -55,7 +68,9 @@ function attachAuthHandlers() {
       const fd = new FormData(loginForm);
       const email = (fd.get('email') || '').toString().trim();
       const password = (fd.get('password') || '').toString();
-      if (!email || !password) return showError(loginForm, 'Email and password required');
+      if (!email) return showError(loginForm, 'Enter the email address you used when creating your account.');
+      if (!/^\S+@\S+\.\S+$/.test(email)) return showError(loginForm, 'Enter a valid email address. Login uses email, not username.');
+      if (!password) return showError(loginForm, 'Enter your account password.');
 
       const btn = loginForm.querySelector('button[type=submit]');
       btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Signing in...';
@@ -65,7 +80,7 @@ function attachAuthHandlers() {
         toast('Welcome back', 'success');
         setTimeout(() => location.href = 'dashboard.html', 400);
       } catch (err) {
-        showError(loginForm, err.message || 'Login failed');
+        showError(loginForm, friendlyAuthError(err.message, 'login'));
       } finally {
         btn.disabled = false; btn.textContent = 'Sign in';
       }
