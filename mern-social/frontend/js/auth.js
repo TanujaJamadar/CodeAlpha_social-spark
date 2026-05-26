@@ -2,7 +2,6 @@
 window.__authJsLoaded = true;
 window.__authLoginAttached = false;
 window.__authRegisterAttached = false;
-const { $, toast, redirectIfLoggedIn } = UI;
 
 function showError(form, msg) {
   form.querySelector('.form-success.global')?.remove();
@@ -36,14 +35,17 @@ function friendlyAuthError(message, mode) {
   if (mode === 'register' && message === 'Valid email required') {
     return 'Enter a valid email address, for example name@example.com.';
   }
+  if (message === 'Failed to fetch') {
+    return 'Could not reach the server. Please check your connection and try again.';
+  }
   return message || 'Something went wrong. Please try again.';
 }
 
 function attachAuthHandlers() {
   UI.renderNav();
-  redirectIfLoggedIn();
+  UI.redirectIfLoggedIn();
 
-  const registerForm = $('#registerForm');
+  const registerForm = UI.$('#registerForm');
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -63,7 +65,7 @@ function attachAuthHandlers() {
         const { token, user } = await API.register({ username, email, password });
         AUTH.setToken(token); AUTH.setUser(user);
         showSuccess(registerForm, 'Account created successfully. Redirecting to your dashboard...');
-        toast('Welcome to Pulse!', 'success');
+        UI.toast('Welcome to Pulse!', 'success');
         setTimeout(() => location.assign('dashboard.html'), 700);
       } catch (err) {
         showError(registerForm, friendlyAuthError(err.message, 'register'));
@@ -75,7 +77,7 @@ function attachAuthHandlers() {
     });
   }
 
-  const loginForm = $('#loginForm');
+  const loginForm = UI.$('#loginForm');
   if (loginForm && !window.__authLoginAttached) {
     window.__authLoginAttached = true;
     loginForm.addEventListener('submit', async (e) => {
@@ -93,7 +95,7 @@ function attachAuthHandlers() {
         const { token, user } = await API.login({ email, password });
         AUTH.setToken(token); AUTH.setUser(user);
         showSuccess(loginForm, 'Signed in successfully. Redirecting to your dashboard...');
-        toast('Welcome back', 'success');
+        UI.toast('Welcome back', 'success');
         setTimeout(() => location.assign('dashboard.html'), 700);
       } catch (err) {
         showError(loginForm, friendlyAuthError(err.message, 'login'));
